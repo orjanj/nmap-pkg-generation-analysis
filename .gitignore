@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Datasets
+*.pcap
+*.cap
+*.csv
+*.xml
+
+# Misc
+*.bak
