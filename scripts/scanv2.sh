@@ -1,12 +1,22 @@
 #!/bin/bash
 # CONSTANTS
-TARGET_HOSTS=(bsc01 bsc02 bsc03 bsc04 bsc05 bsc06 bsc07 bsc08 bsc09 bsc10)
+TARGET_HOSTS=(bsc01 bsc02 bsc03 bsc04 bsc05 bsc06 bsc07 bsc08 bsc09 bsc10 bsc11 bsc12 bsc13 bsc14 bsc15 bsc16 bsc17 bsc18 bsc19 bsc20)
 ZOMBIE_HOST=192.168.2.252
-WORKER_HOSTS=(bsc01-mng bsc02-mng bsc03-mng bsc04-mng bsc05-mng bsc06-mng bsc07-mng bsc08-mng bsc09-mng bsc10-mng)
+WORKER_HOSTS=(bsc01-mng bsc02-mng bsc03-mng bsc04-mng bsc05-mng bsc06-mng bsc07-mng bsc08-mng bsc09-mng bsc10-mng bsc11-mng bsc12-mng bsc13-mng bsc14-mng bsc15-mng bsc16-mng bsc17-mng bsc18-mng bsc19-mng bsc20-mng)
 RESULT_DIR="./results"
 TASK_FILE="tasklist.csv"
 DEFAULT_IF="ens33"
 SUBNET="192.168.2.0/24"
+
+CUSTOM_TASK_FILE=$1
+if [[ -z $CUSTOM_TASK_FILE ]]; then
+    TASK_FILE="tasklist.csv"
+    echo "Using default task file.."
+else
+    TASK_FILE="$CUSTOM_TASK_FILE"
+    echo "Starting scanner with custom task file: $TASK_FILE"
+fi
+
 
 # -----------------------------------
 # TODOS:
@@ -78,17 +88,29 @@ colored_message() {
 # -----------------------------------
 # Check status for a scan
 # -----------------------------------
-check_scan_status() {
-    WORKER_HOST=$1
-    TARGET_HOST=$(echo $WORKER_HOST | sed 's/-mng//g')
-    TCPDUMP_PROCESS_INFO=$(ps aux | grep $WORKER_HOST | grep tcpdump)
-    TASK_NAME=$(echo $TCPDUMP_PROCESS_INFO | awk -F '-w ' '{ print $2 }' | sed 's/.pcap 2>&1//g')
-    TCPDUMP_LOCAL_PID=$(echo $TCPDUMP_PROCESS_INFO | awk '{ print $2 }')
-    SCANNER_PROCESS_INFO=$(ps aux | grep $TARGET_HOST | grep "$TASK_NAME.xml")
-    SCANNER_LOCAL_PID=$(echo $SCANNER_PROCESS_INFO | awk '{ print $2 }')
+# check_scan_status() {
+#     WORKER_HOST=$1
+#     TARGET_HOST=$(echo $WORKER_HOST | sed 's/-mng//g')
+#     TCPDUMP_PROCESS_INFO=$(ps aux | grep $WORKER_HOST | grep tcpdump)
+#     TASK_NAME=$(echo $TCPDUMP_PROCESS_INFO | awk -F '-w ' '{ print $2 }' | sed 's/.pcap 2>&1//g')
+#     TCPDUMP_LOCAL_PID=$(echo $TCPDUMP_PROCESS_INFO | awk '{ print $2 }')
+#     SCANNER_PROCESS_INFO=$(ps aux | grep $TARGET_HOST | grep "$TASK_NAME.xml")
+#     SCANNER_LOCAL_PID=$(echo $SCANNER_PROCESS_INFO | awk '{ print $2 }')
 
-#    get_process_information $WORKER_HOST "scanner_local_pid"
-#    SCANNER_LOCAL_PID=$?
+# #    get_process_information $WORKER_HOST "scanner_local_pid"
+# #    SCANNER_LOCAL_PID=$?
+
+#     if [[ ! -z $SCANNER_LOCAL_PID ]]; then
+#         return 1 # return false - still working
+#     else
+#         return 0 # return true - work done
+#     fi
+# }
+
+check_scan_status() {
+    TASK_NAME=$1
+    SCANNER_PROCESS_INFO=$(ps aux | grep "${RESULT_DIR}/${TASK_NAME}" | grep -v grep)
+    SCANNER_LOCAL_PID=$(echo $SCANNER_PROCESS_INFO | awk '{ print $2 }')
 
     if [[ ! -z $SCANNER_LOCAL_PID ]]; then
         return 1 # return false - still working
@@ -108,11 +130,13 @@ terminate_tcpdump() {
     if [[ ! -z $PROCESS_INFO ]]; then
 
         LOCAL_PID=$(echo $PROCESS_INFO | awk '{ print $2 }')
-        WORKER_HOST=$(echo $PROCESS_INFO | awk '{ print $12 }')
+        WORKER_HOST=$(echo $PROCESS_INFO | awk -F 'ssh' '{ print $2 }' | awk '{ print $1 }')
+# a probable bug:
+#        WORKER_HOST=$(echo $PROCESS_INFO | awk '{ print $12 }')
         REMOTE_PIDS=$(ssh $WORKER_HOST ps aux | grep -E "(tcpdump).*($TASK_NAME)" | awk '{ print $2 }')
         REMOTE_PIDS_VIEW=$(echo $REMOTE_PIDS | tr "\n" " ")
 
-        kill -15 $LOCAL_PID ; ssh $WORKER_HOST kill -15 $REMOTE_PIDS
+        kill -15 $LOCAL_PID ; ssh $WORKER_HOST kill -15 $REMOTE_PIDS_VIEW
         STATUS=$?
         return $STATUS
     fi
@@ -220,6 +244,27 @@ scan() {
 }
 
 
+update_tasklist() {
+    # Read through the tasks in the task file
+    while IFS=, read -r PRIORITY TASK_NAME TASK_STATUS SCANNER EXTRA_ARGS
+    do
+        # Make sure that the task is not the header in the task file
+        if [[ ! -z $TASK_NAME ]] && [[ $TASK_NAME != "task_name" ]]; then
+            check_scan_status $TASK_NAME
+            SCAN_STATUS=$?
+
+            if [[ $SCAN_STATUS -eq 0 ]]; then
+                if terminate_tcpdump $TASK_NAME; then
+                    task_change $TASK_NAME $PRIORITY "ongoing" "completed"
+#                    colored_message "green" "Capturing traffic on task \e[1m${TASK_NAME}\e[0m completed."
+                else
+                    colored_message "red" "Unable to terminate traffic capture on task \e[1m${TASK_NAME}\e[0m."
+                fi
+            fi
+        fi
+    done < $TASK_FILE
+}
+
 # -----------------------------------
 # Read task list
 # -----------------------------------
@@ -229,6 +274,8 @@ deploy_tasks_to_worker() {
     WORKER_HOST=$1
 
     # Read through the tasks in the task file
+#    update_tasklist
+
     while IFS=, read -r PRIORITY TASK_NAME TASK_STATUS SCANNER EXTRA_ARGS
     do
         # Make sure that the task is not the header in the task file
@@ -236,7 +283,6 @@ deploy_tasks_to_worker() {
 
             # Do not scan the management side
             TARGET_HOST=$(echo $WORKER_HOST | sed 's/-mng//g')
-
             # -------------------
             # Task status: NEW - deploy tasks to worker
             # -------------------
@@ -254,34 +300,36 @@ deploy_tasks_to_worker() {
                 # Start dumping traffic on a worker
                 if start_tcpdump $WORKER_HOST "${TASK_NAME}_${TIMESTAMP}.pcap"; then
                     colored_message "green" "Capturing traffic on \e[1m${WORKER_HOST}\e[0m on task \e[1m${TASK_NAME}\e[0m"
-#                    echo "Successfully started capturing traffic on $WORKER_HOST"
 
                     # Start scan
                     sleep 3 # make sure tcpdump is spawned
                     if scan $SCANNER $TARGET_HOST $OUTPUT_PATH "$EXTRA_ARGS"; then
                         colored_message "green" "Scanning \e[1m${WORKER_HOST}\e[0m on task \e[1m${TASK_NAME}\e[0m"
-#                        echo "Successfully started $TASK_NAME with worker $TARGET_HOST"
 
                         # Change the task status
                         task_change $TASK_NAME $PRIORITY "new" "ongoing"
-                        # if task_change $TASK_NAME $PRIORITY "new" "ongoing"; then
-                        #     echo "Successfully changed $TASK_NAME to \"ongoing\"."
-                        # else
-                        #     echo "Error: An error occured when changing $TASK_NAME to \"ongoing\""
-                        # fi
-
                     else
                         colored_message "red" "Unable to scan \e[1m${TARGET_HOST}\e[0m on task \e[1m${TASK_NAME}\e[0m"
-#                        echo "Error: Unable to start $TASK_NAME with worker $TARGET_HOST"
                     fi
                 else
                     colored_message "red" "Unable to capture traffic on \e[1m${WORKER_HOST}\e[0m on task \e[1m${TASK_NAME}\e[0m"
-#                    echo "Error: Could not capture traffic on $WORKER_HOST. Continuing."
                     break
-                fi
+                fi 
 
                 echo "" > /dev/null # for the fun of it
                 break # break out since the worker already have received a task
+#             elif [[ $TASK_STATUS == "ongoing" ]]; then
+#                 check_scan_status $TASK_NAME
+#                 SCAN_STATUS=$?
+
+#                 if [[ $SCAN_STATUS -eq 0 ]]; then
+#                     if terminate_tcpdump $TASK_NAME; then
+#                         task_change $TASK_NAME $PRIORITY "ongoing" "completed"
+# #                        colored_message "green" "Capturing traffic on task \e[1m${TASK_NAME}\e[0m completed."
+#                     else
+#                         colored_message "red" "Unable to terminate traffic capture on task \e[1m${TASK_NAME}\e[0m."
+#                     fi
+#                 fi
             fi
         fi
     done < $TASK_FILE
@@ -292,6 +340,8 @@ deploy_tasks_to_worker() {
 # -----------------------------------
 # Crawl through workers, check availability and deploy tasks
 # -----------------------------------
+#update_tasklist
+
 for WORKER_HOST in ${WORKER_HOSTS[@]};
 do
 
@@ -302,36 +352,17 @@ do
     # available for work
     if [[ $ERR_CODE -eq 0 ]]; then
         colored_message "green" "$WORKER_HOST is available."
-#        echo "$WORKER_HOST is available."
         deploy_tasks_to_worker $WORKER_HOST
 
 
     # unreachable
     elif [[ $ERR_CODE -eq 2 ]]; then
         colored_message "red" "$WORKER_HOST is unreachable (error code: $ERR_CODE)"
-#        echo "$WORKER_HOST is unreachable (error code: $ERR_CODE)."
 
     # unavailable (working on something)
     elif [[ $ERR_CODE -eq 1 ]]; then
         echo "$WORKER_HOST is busy (error code: $ERR_CODE)."
-
-        check_scan_status $WORKER_HOST
-        SCAN_STATUS=$?
-
-        if [[ $SCAN_STATUS -eq 0 ]]; then
-            TASK_NAME=$(get_task_name $WORKER_HOST)
-            CSV_TASK_ENTRY=$(cat $TASK_FILE | grep -E "$TASK_NAME,ongoing")
-            TASK_PRIORITY=$(echo $CSV_TASK_ENTRY | awk -F ',' '{ print $1 }')
-
-            if terminate_tcpdump $TASK_NAME; then
-                task_change $TASK_NAME $TASK_PRIORITY "ongoing" "completed"
-                colored_message "green" "Capturing traffic on \e[1m${WORKER_HOST}\e[0m on task \e[1m${TASK_NAME}\e[0m completed."
-#                echo "tcpdump on $WORKER_HOST is terminated."
-            else
-                colored_message "red" "Unable to terminate traffic capture on \e[1m${WORKER_HOST}\e[0m on task \e[1m${TASK_NAME}\e[0m."
-#                echo "Error: Could not terminate tcpdump processes"
-            fi
-        fi
+#        deploy_tasks_to_worker $WORKER_HOST # checking scan status and updating status from ongoing to completed happens here
     fi
 
 
