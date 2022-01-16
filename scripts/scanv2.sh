@@ -1,12 +1,10 @@
 #!/bin/bash
 # CONSTANTS
 TARGET_HOSTS=(bsc01 bsc02 bsc03 bsc04 bsc05 bsc06 bsc07 bsc08 bsc09 bsc10 bsc11 bsc12 bsc13 bsc14 bsc15 bsc16 bsc17 bsc18 bsc19 bsc20)
-ZOMBIE_HOST=192.168.2.252
 WORKER_HOSTS=(bsc01-mng bsc02-mng bsc03-mng bsc04-mng bsc05-mng bsc06-mng bsc07-mng bsc08-mng bsc09-mng bsc10-mng bsc11-mng bsc12-mng bsc13-mng bsc14-mng bsc15-mng bsc16-mng bsc17-mng bsc18-mng bsc19-mng bsc20-mng)
 RESULT_DIR="./results"
 TASK_FILE="tasklist.csv"
-DEFAULT_IF="ens33"
-SUBNET="192.168.2.0/24"
+SUBNET=""
 
 CUSTOM_TASK_FILE=$1
 if [[ -z $CUSTOM_TASK_FILE ]]; then
@@ -63,26 +61,6 @@ colored_message() {
         echo -e "$MESSAGE"
     fi
 }
-
-
-# get_process_information() {
-#     WORKER_HOST=$1
-#     REQUESTED_INFORMATION=$2
-
-#     TARGET_HOST=$(echo $WORKER_HOST | sed 's/-mng//g')
-#     TCPDUMP_PROCESS_INFO=$(ps aux | grep $WORKER_HOST | grep tcpdump)
-#     TASK_NAME=$(echo $TCPDUMP_PROCESS_INFO | awk -F '-w ' '{ print $2 }' | sed 's/.pcap 2>&1//g')
-#     TCPDUMP_LOCAL_PID=$(echo $TCPDUMP_PROCESS_INFO | awk '{ print $2 }')
-#     SCANNER_PROCESS_INFO=$(ps aux | grep $TARGET_HOST | grep "$TASK_NAME.xml")
-#     SCANNER_LOCAL_PID=$(echo $SCANNER_PROCESS_INFO | awk '{ print $2 }')
-
-#     if [[ $REQUESTED_INFORMATION == "scanner_local_pid" ]]; then
-#         echo $SCANNER_LOCAL_PID
-#     elif [[ $REQUESTED_INFORMATION == "task_name" ]]; then
-#         echo $TASK_NAME
-# # todo: add more later
-#     fi
-# }
 
 
 # -----------------------------------
@@ -236,10 +214,6 @@ scan() {
         nmap -oX $OUTPUT_PATH.xml $TARGET_HOST $SCANNER_ARGS --system-dns 2>&1 > /dev/null &
         ERR_CODE=$?
         return $ERR_CODE
-
-    # Zmap
-    # elif [[ $SCANNER == "zmap" ]]; then
-    #     zmap -i eth0 --probe-module=icmp_echoscan -G <MAC addr> <subnet> -o test.csv --output-fields=*
     fi
 }
 
@@ -289,13 +263,6 @@ deploy_tasks_to_worker() {
             if [[ $TASK_STATUS == "new" ]]; then
                 TIMESTAMP=$(date +%Y%m%d%H%M)
                 OUTPUT_PATH="${RESULT_DIR}/${TASK_NAME}_${TIMESTAMP}"
-
-                # For now commented out - might structure this later
-                # if [ ! -d "$OUTPUT_PATH" ]; then
-                #     if ! mkdir -p $OUTPUT_PATH; then
-                #         OUTPUT_PATH="./$TASK_NAME"
-                #     fi
-                # fi
 
                 # Start dumping traffic on a worker
                 if start_tcpdump $WORKER_HOST "${TASK_NAME}_${TIMESTAMP}.pcap"; then
