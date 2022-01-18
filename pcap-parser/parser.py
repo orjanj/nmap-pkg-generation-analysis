@@ -107,4 +107,4 @@ if __name__ == '__main__':
                                     row.append(hexlify(bytes(packet['ICMP'].payload)).decode())
                                     output_icmp.writerow(row)
 
-                        print(f"Processed file: {filename}")
+                print(f"Processed file: {filename}")
