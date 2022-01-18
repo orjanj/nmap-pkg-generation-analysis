@@ -7,6 +7,7 @@ RESULT_DIR="./results"
 TASK_FILE="tasklist.csv"
 DEFAULT_IF="ens33"
 SUBNET="192.168.2.0/24"
+TCPDUMP_FILTER="dst not 192.168.2.1 and src not 192.168.2.1"
 
 CUSTOM_TASK_FILE=$1
 if [[ -z $CUSTOM_TASK_FILE ]]; then
@@ -202,7 +203,7 @@ start_tcpdump() {
     PCAP_FILENAME=$2
     INTERFACE=$(find_listening_scanner_if $WORKER_HOST)
 
-    if ssh $WORKER_HOST "tcpdump -U -i $INTERFACE -w $PCAP_FILENAME 2>&1" & > /dev/null; then
+    if ssh $WORKER_HOST "tcpdump -U -i $INTERFACE -w $PCAP_FILENAME $TCPDUMP_FILTER 2>&1" & > /dev/null; then
         return 0 # success!
     else
         return 1
