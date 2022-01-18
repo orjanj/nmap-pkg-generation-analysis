@@ -5,7 +5,7 @@ import os
 
 from binascii import hexlify
 from scapy.all import *
-directory = '../../Resources/pcap-results'
+directory = '../../Resources/pcap-results-20220118'
 ignore_ips = ["8.8.8.8", "4.4.4.4", "192.168.2.1"]
 
 if __name__ == '__main__':
@@ -19,7 +19,6 @@ if __name__ == '__main__':
             for filename in os.listdir(output_dir):
                 pcap_path = output_dir + '/' + filename
                 if os.path.isfile(pcap_path):
-                    print(f"Is a file: {filename}")
 
                     try:
                         pcap = PcapReader(pcap_path)
