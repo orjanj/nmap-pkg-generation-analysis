@@ -7,6 +7,20 @@ if [[ -z $TASK_FILE ]]; then
     exit
 fi
 
+process_comparision_clean() {
+    YEAR=$(date +%Y)
+    ps -eo command | grep tcpdump | grep -v grep | sed 's/^ssh.*-w //g' | sed "s/_$YEAR.*$//g" > ps_comparision
+
+    while read TASK_NAME
+    do
+        SCANNER_PID=$(ps -eo pid,command | grep "$TASK_NAME" | grep -Ev 'tcpdump|grep' | awk '{ print $1 }')
+        if [[ -z $SCANNER_PID ]]; then
+            terminate_tcpdump $TASK_NAME
+        fi
+
+    done < ps_comparision
+}
+
 # -----------------------------------
 # Color messages
 # -----------------------------------
@@ -81,6 +95,7 @@ task_change() {
 
 
 update_tasklist() {
+#    process_comparision_clean
     # Read through the tasks in the task file
     while IFS=, read -r PRIORITY TASK_NAME TASK_STATUS SCANNER EXTRA_ARGS
     do
