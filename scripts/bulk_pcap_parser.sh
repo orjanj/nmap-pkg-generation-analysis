@@ -12,5 +12,5 @@ for FILE in $(find $PCAP_DIR -name "*cap" -type f); do
   FILENAME=$(basename $FILE)
   DIRNAME=$(dirname $FILE)
 
-  python3 $PARSER_PATH/pcap_argv_parser.py $FILE
+  python3 $PARSER_PATH/parser.py $FILE
 done
