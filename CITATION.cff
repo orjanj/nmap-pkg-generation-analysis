@@ -1,16 +1,22 @@
 cff-version: 1.2.0
+date-released: 2022-05-25
 title: >-
-  Synthetic Packet Generation and Characterization of
-  Nmap Scans
+  Framework for synthetic packet generation and
+  characterization of Nmap scans 
 message: Please cite this software using these metadata.
 type: software
 authors:
   - given-names: Ørjan Alexander
     family-names: Jacobsen
-repository-code: 'https://github.com/orjanj/bsc-project'
+repository-code: 'https://github.com/orjanj/nmap-pkg-generation-analysis'
 abstract: >-
-  Synthetic packet generation and characterization of
-  Nmap scans
+  Framework for synthetic packet generation and
+  characterization of Nmap scans
 keywords:
   - nmap
   - network scanning
+  - nmap results analyse
+  - packet capture
+  - pcap
+
+
