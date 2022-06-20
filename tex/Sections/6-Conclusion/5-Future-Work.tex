@@ -1,0 +1,22 @@
+\section{Future work}
+\label{s:ConclusionFutureWork}
+A valuable future of work based on the outcome of this thesis is the improvement of the framework.
+This includes further developing the analysis tool to include more visualizations for characterizations of scans.
+More work should be put into streamlining the code for the tools developed in the research making this more efficient and increasing reliability.
+The developed code is in a state of working while not focusing on either the efficiency or the aesthetic aspect.
+While conducting task management for each worker, this is done through SSH. The amount of SSH traffic is as well in a state of working and in an as-is or proof of concept state.
+
+By evaluating the design of the framework, this could be greatly improved. Other improvements to this framework regarding design evaluation are to further develop this framework to fit within a Kubernetes orchestrated cluster\footnote{\OrjansHref{https://kubernetes.io/}{https://kubernetes.io/}} combined with the use of Docker containers\footnote{\OrjansHref{https://www.docker.com/}{https://www.docker.com/}}.
+
+The framework can be extended from only focusing and using the Nmap scanner to use other scanners.
+Combining this framework with Metasploit, described in section \ref{s:HowMetasploitWorks}, for both service discovery and applying exploits is an interesting future work that can be done.
+This means an eventual future work for the framework, depending on the scope, could lead to an offensive tool for automatically applying exploits during scans, though this requires additional research.
+The Zmap scanner described in \ref{s:HowZmapWorks} is a fast scanner that could be integrated for use within this framework for generating synthetic packet captures as well for analysis purposes.
+Nessus, described in section \ref{s:HowNessusWorks}, and Unicornscan, described in section \ref{s:HowUnicornscanWorks}, can also be integrated into this framework for also generating synthetic packet captures.
+Finally, Shodan, described in section \ref{s:HowShodanWorks}, can be integrated through CLI into this framework. Primarily Shodan is a cloud tool but can run locally as well using an API.
+Though, some technicalities must be applied here to be able to generate synthetic packet captures. Additional research for this scanner is needed in order to elaborate in detail on the potential of Shodan within this framework.
+
+Finally, development of intrusion detection system signatures for Suricata\footnote{\OrjansHref{https://suricata.io}{https://suricata.io}} or \footnote{\OrjansHref{https://www.snort.org}{https://www.snort.org}} based on the packets characteristics from this research is also a alternative future of work.
+Classification of scanning are further elaborated within section \ref{s:ClassificationOfScanning}.
+
+

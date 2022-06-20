@@ -1,0 +1,29 @@
+%% ---------------- TCPDUMP ----------------
+\subsection{Enabling ordinary users to execute tcpdump}
+\label{s:EnableTCPDumpNormalUsers}
+tcpdump requires higher privileges to capture incoming and outgoing traffic on the network interface.
+Since tcpdump is the program used for packet capturing in this research, it would be more efficient to give an ordinary user access to this program file and traffic capturing.
+The design of the capture is that the scanner uses SSH to issue tasks to each worker host.
+If tcpdump requires root access, this will lead to more complications in configurations on the worker host while issuing tasks to a worker.
+This issue is mitigated by setting the set-user-ID bit on the tcpdump program, enabling unprivileged users to capture traffic on the worker host's network interface, which normally requires privileged access.
+
+Since the worker hosts are located on an isolated virtual network, the risk of unauthorized access is reduced and enabling simplistic capture of packets without any advanced configuration changes.
+These commands shown in listing \ref{lst:CmdChmodTcpdump} must be executed as $root$ on the worker to gain effect. The command in line one would return the full path for tcpdump, as seen in line two.
+Line three changes the modifications on the program, setting the set-user-ID bit.
+To assure that this is executed successfully, line four would list the permissions for the file shown inline five. Here we see that the $s$ flag is set for the owner ($-rws$) and the group ($r-s$), while a normal user has read and execution permissions ($r-x$).
+
+\begin{listing}[!ht]
+\caption{Command for changing mode on tcpdump file}
+\label{lst:CmdChmodTcpdump}
+\begin{minted}[linenos]{Bash}
+which tcpdump
+/usr/sbin/tcpdump
+chmod +s /usr/sbin/tcpdump
+ls -l /usr/sbin/tcpdump
+-rwsr-sr-x 1 root root 1044232 Dec 31  2019 /usr/sbin/tcpdump
+\end{minted}
+\end{listing}
+
+After setting the set-user-ID bit on the file, the file rights looks similar like mentioned in the listing above.
+
+%% ---------------- /TCPDUMP ----------------

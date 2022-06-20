@@ -1,0 +1,57 @@
+\section{Research Objectives}
+\label{s:IntroResearchObjectives}
+The primary objective for this thesis will focus on the creation of a framework for synthetic packet generation and characterization of Nmap scans.
+The result outcome of this research is to generate synthetic packet captures which is used in a empirical analysis.
+These packet captures are used in comparison to determine patterns and similarities for each type of scan.
+Since there is a need of having a certain number of scans to determine patterns and similarities, one of the main outcomes of this research is to generate code for automating the generation of synthetic packet captures in a fully controlled test environment. By doing so, this enables the generation of a given number of scans which leads to a fully scalable environment depending on which number of scans conducted.
+
+By generating synthetic packet captures for comparison, this thesis will as a outcome result in a analysis of various types of Nmap scans compared against various evasion techniques used in Nmap called timing templates. These synthetic packet captures can be used for contribution to a larger network repository and empirical analysis of a chosen number of Nmap scans.
+Nmap scans based on artefacts and characteristics in packet captures will be investigated in this thesis.
+In order to process and normalize packet capture, code will be produced in order to extract as many fields as possible from the collected packet capture data.
+Other outcome of this research is a template for analysis of these packet captures used for comparison and visualisation of the various types of scans.
+
+
+%%--------------------------------------------------------------------------------------------------
+\section{Approach/Methodology}
+\label{s:ApproachMethodology}
+Within this section, the approach taken to the research is explained, and the chosen research strategy is elaborated, together with the chosen project methodology and the approach to accomplish the objectives for this research.
+A Scrum methodology mixed with a Kanban board was the chosen method to streamline the process of accomplishing the objectives in a structured manner.
+Considering the challenge regarding time constraints, the combination with a clear step-to-step approach is crucial to achieving the main goals.
+
+
+
+%%--------------------------------------------------------------------------------------------------
+\subsection{Research strategy}
+\label{ss:ResearchStrategy}
+A separated, fully controlled lab environment must be set up to achieve the full potential of this research, considering where the research is taking place.
+This includes one or multiple operating systems to compare if different operating systems return different sets of data. Also, multiple scanning software will be used to develop intrusion detection system signatures which will lead to verifying these against other larger data sets and identification and classification of scans in the wild. The primary goal is to produce signatures and verify these against other data sets. Secondly, these signatures could be used to identify scanning software and potential various scanning types.
+Included in this controlled lab environment is the generation of data sets, which will be collected through packet captures with multiple scanning tools. The results of this could be used in further research in the future.
+
+The chosen research strategy is via empirical data generation and analysis.
+Controlled since the whole research is in a virtual environment, where all traffic is within a virtual network. The effects of outside factors are minimized.
+This research contains analyzing large proportions of data, which especially focuses on the development and verification of IDS signatures which qualifies this research for a quantitative methodology, not unlike the research by \textcite{Liu2018} where data were collected within an unused \textit{/18} IPv4 address block in Japan.
+\textcite{6906328} conducted systematic research where taxonomy was first built, followed by refined anomaly descriptions, analyzing flagged events, and building appropriate signatures for uncharacterized behavior.
+A systematic methodology is chosen based on the successful research results by \textcite{6906328}. 
+From the research conducted, metrics are to be presented doing this empirical research.
+
+
+%%--------------------------------------------------------------------------------------------------
+\subsection{Project methodology}
+\label{ss:ProjectMethodology}
+Chosen project methodology for this project is Scrum with the use of Kanban board.
+Kanban will streamline tasks and optimize a flow during sprints, which will usually last no longer than a month.
+Introducing the Scrum framework to this project will create a good overview for breaking larger milestones into smaller goals that can be completed during a sprint.
+
+
+%%--------------------------------------------------------------------------------------------------
+\subsection{Approach}
+\label{ss:Approach}
+
+
+The first approach for the project is to research the field regarding scanning, investigating Nmap\footnote{\OrjansHref{https://nmap.org}{https://nmap.org}} regarding usage and go through earlier research to gain more in-depth competence in conducting scanning.
+This will be documented in the first deliverable in the form of a literature review.
+Secondly is to successfully install virtual machines with the required tools to conduct the research.
+The next step is to collect data sets by running scans against the different workers and log the data.
+The output of this will result in data that are going to be used in the process of conducting analysis. It is required to become familiar with various types of scans during this step as well.
+During all mentioned steps, it is required to document the procedure for possible future research could replicate the environment used during this research.
+

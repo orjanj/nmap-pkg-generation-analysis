@@ -1,0 +1,132 @@
+%% ---------------- NETWORK CONFIGURATION ----------------
+\subsection{Network configuration}
+\label{ss:WorkerNetworkConfiguration}
+Within the setup of the lab environment, each worker host must have its unique network configuration.
+For starters, a unique hostname needs to be set.
+By executing the command as $root$ in listing \ref{lst:CommandHostnameCtl}, the hostname for the worker host is set.
+\begin{listing}[!ht]
+\caption{Command for setting hostname}
+\label{lst:CommandHostnameCtl}
+\begin{minted}{Bash}
+hostnamectl set-hostname <hostname>
+\end{minted}
+\end{listing}
+
+Within the research, the hostname convention used is $bscXY$, where the $XY$ symbolizes an incrementing number starting on \textit{01}.
+
+Furthermore, the network configurations for each worker need to be set in the netplan configuration file shown in listing \ref{lst:NetworkCfg}. Within this file, both network interfaces are static configured. One NIC is used for the scanning traffic, and the second NIC is used for management traffic. To retrieve the name for each of the NICs's, the command $ip$ $a$ can be executed in the terminal. Result seen in listing \ref{lst:NetworkInterfaces}.
+
+The IP subnet for the management network is chosen in accordance with RFC 1466 \autocite{rfc1466}.
+The IP address block for the scanning network is chosen partly in accordance with RFC 5737 \autocite{rfc5737}, enlisted as $TEST-NET-1$ in the RFC and within this paper as \textsc{scanning network}. Different from the RFC standard is the subnet $192.0.2.0/24$ given in the RFC 5737 is not chosen since it's already used for another project within the local network.
+To not create confusion, the $192.168.2.0/24$ subnet is chosen for this purpose, enlisted as \textsc{scanning network}.
+
+
+
+\begin{listing}[!ht]
+\caption{Network configuration for worker host}
+\label{lst:NetworkCfg}
+\begin{minted}[linenos]{yaml}
+# File contents of /etc/netplan/00-installer-config.yaml
+network:
+  ethernets:
+    ens33:
+      addresses:
+      - 192.168.2.110/24
+      gateway4: 192.168.2.1
+      nameservers:
+        addresses:
+        - 192.168.2.1
+        search: []
+    ens36:
+      addresses:
+      - 194.100.10.110/24
+      gateway4: 194.100.10.1
+      nameservers:
+        addresses:
+        - 194.100.10.1
+        search: []
+  version: 2
+\end{minted}
+\end{listing}
+
+Within each of the netplan configuration files, a unique IP address needs to be set for each of the workers, as seen in listing \ref{lst:NetworkCfg}.
+To reload the network configuration, execute $netplan$ $apply$ on the worker host as root.
+
+These network settings can be verified after the settings are applied by running the command $ip$ $a$ on the worker host, resulting in a similar output as seen in listing \ref{lst:NetworkInterfaces}.
+Within listing \ref{lst:NetworkInterfaces} we see that the scanning interface ($ens33$) have the IP address 192.168.2.110, which is validated against the configuration in listing \ref{lst:NetworkCfg}, while the management network is set to $ens36$ with the IP address 194.100.10.110.
+
+
+\begin{listing}[!ht]
+\caption{Listing of network interfaces}
+\label{lst:NetworkInterfaces}
+\begin{minted}[fontsize=\footnotesize]{Bash}
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:11:22:33:44:55 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.2.110/24 brd 192.168.2.255 scope global ens33
+       valid_lft forever preferred_lft forever
+3: ens36: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:22:33:aa:ff:44 brd ff:ff:ff:ff:ff:ff
+    inet 194.100.10.110/24 brd 194.100.10.255 scope global ens36
+       valid_lft forever preferred_lft forever
+\end{minted}
+\end{listing}
+
+In Linux, there is a file located in $/etc/hosts$, shown in listing \ref{lst:EtcHostsScannerHost}, which is a local DNS file for looking up locally defined DNS records.
+On the scanning host for this research, this file contains the IP addresses of each of the workers IP addresses.
+The file has entries for both network interfaces, scanning network, and management network as described in section \ref{ss:WorkerNetworkConfiguration}.
+
+\begin{listing}[!ht]
+\caption{Contents of /etc/hosts on scanner host}
+\label{lst:EtcHostsScannerHost}
+\begin{minted}[fontsize=\footnotesize]{Bash}
+127.0.0.1       localhost
+127.0.1.1       kali
+192.168.2.101   bsc01
+192.168.2.102   bsc02
+192.168.2.103   bsc03
+192.168.2.104   bsc04
+192.168.2.105   bsc05
+192.168.2.106   bsc06
+192.168.2.107   bsc07
+192.168.2.108   bsc08
+192.168.2.109   bsc09
+192.168.2.110   bsc10
+192.168.2.111   bsc11
+192.168.2.112   bsc12
+192.168.2.113   bsc13
+192.168.2.114   bsc14
+192.168.2.115   bsc15
+192.168.2.116   bsc16
+192.168.2.117   bsc17
+192.168.2.118   bsc18
+192.168.2.119   bsc19
+192.168.2.120   bsc20
+194.100.10.101   bsc01-mng
+194.100.10.102   bsc02-mng
+194.100.10.103   bsc03-mng
+194.100.10.104   bsc04-mng
+194.100.10.105   bsc05-mng
+194.100.10.106   bsc06-mng
+194.100.10.107   bsc07-mng
+194.100.10.108   bsc08-mng
+194.100.10.109   bsc09-mng
+194.100.10.110   bsc10-mng
+194.100.10.111   bsc11-mng
+194.100.10.112   bsc12-mng
+194.100.10.113   bsc13-mng
+194.100.10.114   bsc14-mng
+194.100.10.115   bsc15-mng
+194.100.10.116   bsc16-mng
+194.100.10.117   bsc17-mng
+194.100.10.118   bsc18-mng
+194.100.10.119   bsc19-mng
+194.100.10.120   bsc20-mng
+\end{minted}
+\end{listing}
+
+
+

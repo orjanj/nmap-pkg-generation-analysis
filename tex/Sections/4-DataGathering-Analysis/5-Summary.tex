@@ -1,0 +1,14 @@
+\section{Summary}
+\label{s:DataGASummary}
+
+By using this lab environment described in chapter \ref{chp:DesignImplementation}, the generation of synthetic packet captures can be conducted.
+This is a large step in streamlining the process of producing such data compared to conducting these scans in a manual method. A manual method increases the risk of errors and produces incomparable data if not conducted in the same procedure for all scans.
+The raw packet capture files are retrieved from each worker and parsed to comma-separated value (CSV) files by using the \textsc{packet capture parser} described in \ref{ss:PcapParser}.
+These parsed CSV files are then read into the Jupyter notebook, where the semi-automatic analysis takes place.
+In the Jupyter notebook, it is possible to press \textit{Run} to go through the whole analysis automatically. The manual required procedure if the notebook is to input the relevant variables in the head of the file, such as the destination for the given scan, the scan title, and the default figure size.
+The main reason for using the Jupyter notebook for analysis purposes is to streamline the process making the process semi-automatic. Only semi-automatic because the process is not fully automated due to the required given parameters in the head of the file must be changed to match the respective scan.
+The analysis notebook is segmented into sections mainly focusing on scan duration, packet counts, packets per second, and scanned port order.
+Plots for visualizing similarities and patterns were conducted for combining values for sequence numbers, IP ID, ports, and scan numbers.
+These plots have shown to significantly show interesting findings regarding traffic patterns, which will be further discussed in chapter \ref{chp:Results}.
+
+

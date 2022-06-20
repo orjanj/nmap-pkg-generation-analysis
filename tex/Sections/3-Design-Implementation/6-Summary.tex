@@ -1,0 +1,27 @@
+\section{Summary}
+\label{s:DesignImplementSummary}
+To conduct this research without setting up a lab environment and automating these types of scans would not be a beneficial design choice considering time management due to the fact that these scans then had to be conducted manually.
+The amount of various types of scans within this research is the following six ($m$), each described in its respective section:
+\begin{itemize}
+    \item Section \ref{s:ServiceScan}: Port and Service scan
+    \item Section \ref{s:ICMPEcho}: Host Discovery using ICMP echo requests
+    \item Section \ref{s:XMASScan}: XMAS scan
+    \item Section \ref{s:NullScan}: Null scan
+    \item Section \ref{s:FINScan}: FIN scan
+    \item Section \ref{s:ConnectScan}: Connect scan
+\end{itemize}
+
+As described in section \ref{s:AvoidingDetection}, it exists six different timing templates ($t$). Each of the different scanning types with the respective timing template has ten scans ($n$).
+This means the total sum ($s$) of packet captures would be calculated as follows:
+
+$s = (m * t) * n$
+
+This results in \textit{360} packet captures in total.
+Since each Nmap scan would use different times compared to each other, a user executing these scans manually would use a significant amount of time conducting this research manually.
+This would require the user to regularly check the scanning status and start a new scan depending on the status of the scan.
+Other factors such as human error would increase by manually scanning as well. Depending on the intervals the researcher checks the scan status, the time conducting this research would be significantly higher compared with an automated scanning framework like this lab environment and scripts included.
+
+This framework makes use of the workers immediately when they're done with the last task, streamlining the scanning process significantly.
+Development of scripts to conduct scanning, cleaning processes, and conducting task management were made to automate this process.
+These scripts are described in detail in section \ref{s:Scripts}.
+

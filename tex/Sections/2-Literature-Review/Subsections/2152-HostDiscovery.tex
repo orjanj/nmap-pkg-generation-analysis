@@ -1,0 +1,9 @@
+%------------------ ICMP ECHO REQUESTS ------------------ 
+\subsection{Host discovery using ICMP echo requests (ping scan)}
+\label{s:ICMPEcho}
+
+ICMP echo requests could be used for the purpose of determining whether a host is online or offline.
+According to the RFC 792 \autocite{rfc792} it exists multiple types of ICMP types which are messages for a request or reply message, such as timestamp, redirect, echo, timestamp, information, source quench, destination unreachable and time exceeded.
+The echo type, type number 8 is a echo request message sent to a target to determine if an reply could be received. The echo reply message has type number 0. The ICMP echo requests can be used for determine whether an host is online or not \autocite{rfc792, 10.5555/1538595}.
+Many firewalls have by default configured to deny echo ICMP requests \autocite{arkin1999network}.
+The nmap scanner can conduct this sort of operation by using the parameters $-PE$ in a scan \autocite{10.5555/1538595}.

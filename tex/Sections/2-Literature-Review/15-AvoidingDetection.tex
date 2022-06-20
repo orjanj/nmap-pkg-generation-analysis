@@ -1,0 +1,7 @@
+\section{Avoiding detection (evasion)}
+\label{s:AvoidingDetection}
+According to the study of \textcite{jammes2013snort} Snort were able to detect five out of six of the different timing templates used for Nmap, which is default delivered by Nmap. The last template, the paranoid template, were Snort not able to detect according to the study \autocite{jammes2013snort}.
+These templates are named insane, aggressive, normal, polite, sneaky and paranoid. The difference of these are the minutes waited between sending a probe to the target host. During the paranoid mode, Nnmap waits 5 minutes while at the sneaky mode it waits 15 seconds \autocite{pinkard2008nmap, jammes2013snort}.
+During a scan execution, the parameter $-T$ could be used to set the template. The higher the number are, the faster the scan are \autocite{pinkard2008nmap}.
+
+During a Nmap scan, other parameters could also be applied such as the Time-to-Live parameter. Other methods for avoiding detection is to randomize the order hosts are scanned in. Nmap have capabilities for sending UDP and TCP packets with invalid checksums, which often firewalls and other security controls drops due to the fact the checksum aren't checked. If a reply is given, these are often from firewalls or other security controls.

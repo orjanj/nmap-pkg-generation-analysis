@@ -9,4 +9,4 @@ This is developed as my bachelors degree in Cyber Security at [Noroff](https://w
 
 The Kanban board used for project management during development is located [here](https://github.com/users/orjanj/projects/3).
 
-The research paper would be located within this repository in a later stage.
+The bachelor thesis is located [here](tex/thesis.pdf).

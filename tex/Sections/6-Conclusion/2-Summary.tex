@@ -1,0 +1,34 @@
+
+\section{Summary of Research}
+During the establishment of the research project, a Scrum methodology\footnote{\OrjansHref{https://www.scrum.org/resources/what-is-scrum}{https://www.scrum.org/resources/what-is-scrum}} was adopted with the use of the Kanban board. Primarily this was established to keep a structured view of progression, maintain issues and tasks, and streamline the development process to accomplish the research objectives. A step-to-step approach to achieving each milestone was crucial to streamline the process, given the specific timeframe set for the research.
+In the Scrum methodology, sprints and sprint goals are an important part of the methodology to achieve the given goals.
+Within this research, Github milestones were used as an alternative to Scrum's sprint goals since these milestones integrate with Github repositories and Github projects.
+Other usages within Github were the project feature, containing Kanban board for issue tracking and task management\footnote{\OrjansHref{https://github.com/users/orjanj/projects/3}{https://github.com/users/orjanj/projects/3}}.
+
+In the early phase of the research, a lab environment fully segmented from the local network was needed to conduct this type of research.
+This was created as a first step where the chosen virtualization platform was VMware Workstation due to previous knowledge of the use and setup of the platform.
+By choosing this platform, the risk of non-familiar setup and creation issues was mitigated.
+The chosen operating system for each worker was Ubuntu Linux, also as a personal preference and experience within the system. The same applies to the choice of the scanner operating system, which was Kali Linux. Kali Linux already had all the required tools installed for the conduction of this research.
+Regarding the choice of the Nmap, scanners were also an argument of familiarisation and earlier use cases.
+
+The choice of automating this was taken early as a step toward streamlining the data generation process.
+During the project initiation, the chosen number of scans was 100 scans. This was later reduced and restricted to 10. The main reason behind this was the consummation of time for the slowest timing templates, especially the \textit{paranoid} timing template. A \textit{paranoid} scan kept a worker busy over a certain amount of time, resulting in not being able to conduct other faster tasks simultaneously. Another important argument for this was the number of scans for each timing template needed to be the same amount of scans.
+
+The main programming language chosen for the development of the tools used for automating the scans was Bash. The choice was based on personal development experience in the language.
+Another important argument for choosing Bash is that its default is installed on most Linux distributions, making installation of other tools and software which require the internet not relevant.
+The scripts developed within this research are further described in section \ref{s:Scripts}.
+
+For the generated packet captures, parsing of the data from packet capture format to a comma-separated value (CSV) was needed in order to feed this to the Jupyter notebook during the analysis phase.
+This parser was written in Python, which extracts all relevant fields from the packet captures and translates them into CSV for analysis purposes.
+The \textsc{packet capture parser} is further described in section \ref{ss:PcapParser}.
+
+The analysis part of this research was developed in the Jupyter notebook, further described in section \ref{s:AnalysisJupyter}.
+Jupyter has capabilities of writing Python code in the web browser, which enables the use of visualizations and empirical data analysis.
+This must be seen as yet another step in process streamlining, making this analysis a semi-automatic procedure.
+Most importantly with Jupyter is the \textit{Run} function, which makes the code in Jupyter executed step by step without user interactions.
+
+The main risk factor for this research was time management and using products with earlier gained experience reduced this risk factor to a minimum.
+Other risk factors were hardware crashes and backups. These were mitigated by using \textit{rsync}\footnote{\OrjansHref{https://linux.die.net/man/1/rsync}{https://linux.die.net/man/1/rsync}} for backing up code and generated production data to other hard drives on the same computer. The component \textsc{packet capture retrieval} was developed for the purpose of syncing generated packet captures on worker hosts to the scanner host. This component is used on the scanning host to retrieve packet captures from each worker and is further described in \ref{ss:PcapRetrieval}.
+From the host running VMware Workstation, \textit{rsync} were used to back up the data in cases of either hardware crash or virtual machine breakdown.
+
+

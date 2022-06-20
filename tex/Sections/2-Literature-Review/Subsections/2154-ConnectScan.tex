@@ -1,0 +1,7 @@
+%------------------  CONNECT SCAN ------------------ 
+\subsection{Connect scan}
+\label{s:ConnectScan}
+During a connect scan, a three-way handshake is performed to open a connection to the given target.
+The connect scan is abbreviated in this research to \textit{TCP full scan}.
+A regular reply would be an SYN/ACK (synchronize/acknowledge) packet if a TCP port is listening on the given port, otherwise, a host would respond with an RST/ACK (reset/acknowledge) \autocite{pinkard2008nmap, dabbagh2011slow}.
+This depends also on other factors such as the firewall configurations, where hosts would reply with RST/ACK if the firewall blocks the connection. TCP connect scans have a higher likelihood to be identified and logged compared to stealth scans, described in section \ref{s:StealthScan}. By using the Nmap connect scan, Nmap uses the operating system for connection establishment rather than customising the raw packet when sending it to a target. This type of scan creates a large number of connection attempts to various target ports, and this often indicates a ongoing port scanning. Due to this, the risk of being detected is significantly higher than other types of scans. Systems that do not close TCP connections in a proper manner can suffer from denial of service (DoS) conditions. The parameter to use in Nmap for conducting a connect scan is $-sT$ \autocite{pinkard2008nmap}.

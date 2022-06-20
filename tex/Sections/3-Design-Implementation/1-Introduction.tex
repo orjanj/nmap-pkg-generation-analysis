@@ -1,0 +1,10 @@
+\section{Introduction}
+\label{s:DesignImplementationIntroduction}
+This chapter presents the overview of the design, together with the technical implementation of the lab environment and code used to conduct the data generation.
+
+The importance of automatically generating synthetic packet captures is further discussed in this chapter.
+Having a standard of conducting each network scan enhances the reliability of each scan being conducted in a similar standardized way compared to manually running these Nmap scans, where differences might appear depending on the user inputs while executing the commands and human error.
+In cases where this is conducted manually, the risk of not standardizing the scans can lead to incomparable data as an output during the analysis phase.
+Therefore, the importance of automating the scans with a standard is crucial. The automation is also time-saving compared to a manual scanning procedure.
+This automation is described in this chapter, where the main components are described. Among these is the important scanner script elaborated in section \ref{s:ScannerScript}.
+By the use of various timing templates, the workers finish the scans at different times, which makes a manual scanning method very time-consuming and not effective. This design and implementation chapter will describe the setup of such an automation packet capture generation.
