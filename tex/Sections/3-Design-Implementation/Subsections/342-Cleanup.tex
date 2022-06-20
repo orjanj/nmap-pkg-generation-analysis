@@ -1,0 +1,64 @@
+\subsection{Task manager}
+\label{ss:Cleanup}
+
+The main objective of this script is to maintain the tasklist, changing the status of tasks from ongoing to completed.
+This script is executed through the terminal as a user and is not designed to run through a cronjob.
+The main input to this script is the given task file.
+
+\subsubsection{Process comparison}
+This function extracts the executed command for a process matching tcpdump and pipes the output to a temporary file.
+The temporary file is iterated through, and the PID for each running tcpdump is retrieved.
+From here, the function compares the task name to processes initiated through SSH to each worker.
+The function then checks if there is a scanning process towards the given work with the correlating task name.
+If there is no PID returned from this check, the function terminates the tcpdump on the worker.
+
+\begin{listing}[!ht]
+\caption{Process comparison and TCPDump termination}
+\label{lst:ProcessCompare}
+\begin{minted}{Bash}
+process_comparision_clean() {
+  YEAR=$(date +%Y)
+  ps -eo command | grep tcpdump | grep -v grep | sed 's/^ssh.*-w //g' | \
+  sed "s/_$YEAR.*$//g" > ps_comparision
+
+  while read TASK_NAME
+  do
+    SCANNER_PID=$(ps -eo pid,command | grep "$TASK_NAME" | grep -Ev 'tcpdump|grep' | \
+    awk '{ print $1 }')
+    if [[ -z $SCANNER_PID ]]; then
+      terminate_tcpdump $TASK_NAME
+    fi
+
+  done < ps_comparision
+}
+\end{minted}
+\end{listing}
+
+
+\subsubsection{Reused functions from the scanner script}
+\label{ss:ReusedFunctionsScannerScript}
+Compared to the scanner script, functions have been reused within this script.
+These are important functions for colorizing messages, checking scan status, terminating tcpdump, changing task status, and updating task list.
+These functions are described within the scanner section \ref{s:ScannerScript}.
+
+
+Further on, this script contains a true while loop for continuously running checks to update the tasks.
+The reason behind this is to reduce the amount of irrelevant traffic generated after a scan is completed.
+
+
+\begin{listing}[!ht]
+\caption{Update tasklist continously}
+\label{lst:TasklistUpdateContinue}
+\begin{minted}{Bash}
+while true
+do
+  if update_tasklist; then
+    DATE=$(date "+%d.%m.%Y %H:%M:%S")
+    printf "\r[ $DATE ] Cleaned taskfile: $TASK_FILE"
+    sleep 2
+  else
+    printf "\r[ $DATE ] Failed cleaning taskfile: $TASK_FILE"
+  fi
+done
+\end{minted}
+\end{listing}

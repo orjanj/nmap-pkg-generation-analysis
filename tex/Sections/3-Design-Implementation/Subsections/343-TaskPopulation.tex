@@ -1,0 +1,33 @@
+\subsection{Task population}
+\label{s:TaskPopulation}
+A script was developed for populating a unique tasklist for streamlining the process of creating tasks.
+The script reads one input parameter, which is a template task file created by a user.
+This input file is then iterated through, and an incrementing number is added to each task for the identification of unique tasks later during a scan.
+\begin{listing}[!ht]
+\caption{Populating tasks to task file}
+\label{lst:TaskPopulation}
+\begin{minted}{Bash}
+#!/bin/bash
+INPUT_FILE=$1
+
+if [[ -z $INPUT_FILE ]]; then
+  echo "Usage: $0 <task-file>"
+  echo "Default number of task param is \"50\" - must be changed in for loop in line 12"
+  exit
+fi
+
+while IFS=, read -r PRIORITY TASK_NAME TASK_STATUS SCANNER EXTRA_ARGS
+do
+  for i in {1..50}
+  do
+    echo "${PRIORITY},${TASK_NAME}_${i},${TASK_STATUS},${SCANNER},${EXTRA_ARGS}"
+  done
+done < $INPUT_FILE
+\end{minted}
+\end{listing}
+
+To populate a new task list file, the following command needs to be executed in a Bash shell.
+\begin{minted}{Bash}
+user@host:~# bash populate.sh template-taskfile.csv >> new-taskfile.csv
+\end{minted}
+This will append each line generated to the `new-taskfile.csv`.

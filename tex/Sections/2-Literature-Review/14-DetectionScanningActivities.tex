@@ -1,0 +1,24 @@
+\section{Detection of scanning activities}
+\label{s:ScanningDetection}
+It exists software today which are able to detect scanning activity. The technical term often used for this activity is Intrusion Detection Systems (IDS).
+
+Snort is used as a standard Intrusion Detection System since it has a high level of customisation and easy to use. According to a study by \textcite{chumachenko2017study}, intrusion detection system (IDS) and intrusion prevention system (IPS) can detect zero-days, but also prevent known attacks and other steps after the initial attack (e.g. port scans).
+\textcite{jammes2013snort} points to the same argument regarding detection of port scanning and exploits if Snort is correctly configured and has the signatures for given exploits.
+There exists various types of techniques to execute a scan and in some cases these techniques can be stealth according to a paper by \textcite{8082680}, though the challenge is to detect these types of scans. Snort has according to the paper the capabilities to handle such activity.
+\textcite{thapa2020role} review various IDS and IPS tools, such as Snort
+\footnote{\OrjansHref{https://www.snort.org}{https://www.snort.org}}, Suricata\footnote{\OrjansHref{https://suricata.io}{https://suricata.io}},
+Zeek\footnote{\OrjansHref{https://zeek.org}{https://zeek.org}} among others.
+\textcite{day2011performance} discuss tests comparing if Suricata shows increase in system performance and accuracy compared with Snort, which is single threaded.
+
+Snort aren't able to detect port scanning while the flag $sfPortscan$ are enabled. The frag3 preprocessor defragments the IP packet to prevent malicious packets to escape detection. Packets could be intentionally fragmented to avoid detection, Snort therefore needs to defragment the packet to check the contents. The stream5 preprocessor is another component which is important to detect \hyperref[s:HowNmapWorks]{nmap} scanning. The stream5 preprocessor reconstructs the TCP flow and has capabitilies for reconstructing UDP sessions. This enabled rules to be applied to the data stream. Snort cannot detect port scanning without this feature \autocite{jammes2013snort}.
+
+According to a study by \textcite{Liu2018} the observation of cyber attacks and anomalies have among security researchers made them able to developed cyberspace monitoring approaches to detect such anomalies.
+The study also shows that darknet provides effective passive monitoring approaches, which often refers to globally routable and unused IP addresses that are used to monitor unexpected incoming network traffic. This is an effective approach for viewing network security activities remotely.
+The main goal of the study was to create and propose a simple taxonomy of darknet traffic.
+
+
+There exists multiple other ways to create taxonomies of network anomalies.
+Such as a study by \textcite{6906328} where previously documented anomalous events are classified using data collected through six years.
+The report points out that previously unknown events are now accountable for a substantial number of UDP network scans, scan responses and port scans. With their proposed taxonomy the number of unknown events have decreased from 20\% to 10\% of all events compared to the heuristic approach \autocite{6906328}.
+Such scans can be handled by nmap \autocite{pinkard2008nmap}, which is a network scanner which has many features, used for administration, security auditing and network discovery.
+Subverting firewalls and IDS, optimisation of nmap performance and automating common network tasks could also be done with the nmap.

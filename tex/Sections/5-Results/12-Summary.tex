@@ -1,0 +1,22 @@
+\section{Summary}
+Using the Jupyter notebook for analysis of all parsed packet captures combined with the use of visualizations increased the quality outcome of the analysis.
+The most interesting findings of the analysis were presented deeper in each respective subsection within chapter \ref{chp:Results}.
+
+The packet count was compared against the various types of scanning types and the timing templates in order to find similarities and to stand out statistics.
+Standing out was the \textit{ping scan} using the \textit{aggressive} and \textit{normal} timing template, which had a significantly higher packet per second (PPS) compared with the next scans on the list. Other standouts were the \textit{service scan} using \textit{insane} and \textit{aggressive} timing templates. Using the \textit{insane} timing template, it had over two times higher PPS score compared to the TCP full scan. Using the \textit{aggressive} timing template, it had a $1.64$ times faster PPS compared with the ping scan.
+These results point to 1 out of 10 scans clearly using a significant amount of more time compared to the others. This can point to a high network load.
+These are further investigated in section \ref{s:PacketCounts}.
+
+Port sequences were investigated and concluded with not following the same sequence for each scan conducted.
+Out of the six scan types investigated, five of these clearly show the same patterns regarding source ports targeted and the IP ID number used. The\textit{TCP full scan} deviates from this logical pattern, shown in figure \ref{fig:IPIDSrcPort}.
+Five of these patterns consists of the same source port for one scan with various IP IDs. The \textit{TCP full scan} clearly differs from these results with a different source port for each packet sent, resulting in an artwork diagram. The \textit{TCP full scan} has a number of unique source ports in a range between 7108 and 7664, shown in table \ref{tbl:UniqueSourcePorts}.
+Other interesting patterns is figure \ref{fig:IPIDSrcPort} is the \textit{sneaky} and \textit{paranoid} scan, which shows "feathers" symbolizing using not only one source port, but a port within close range.
+Further, the targeted destination ports show similar patterns among the various scanning types and timing templates. The main range of destination ports is ranges below 10000, while other patterns symbolizing a clear line are shown both in the range below 30000 and below 50000. This is shown in figure \ref{fig:DstPortSequenceMisc}.
+The same destination port patterns are also shown when plotting the IP ID and the destination ports in a diagram shown in figure \ref{fig:DstIPIDSequenceMisc}.
+
+Regarding destination port patterns, a clear similarity between all various scan types and timing templates is seen.
+The same targeted destination ports are targeted for each scan type and for each timing template, resulting in similar diagrams shown in figure \ref{fig:ScanNumberDstPort}.
+Interesting is the existence of unused destination port blocks, shown in the same figure.
+By executing a code snippet for mapping out untargeted and targeted ports, the amount of untargeted ports is 64535 resulting in 1000 targeted ports which can be compared to the packet count of 1000 in one scan.
+
+

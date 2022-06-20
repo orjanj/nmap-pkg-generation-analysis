@@ -1,0 +1,34 @@
+%------------------ STEALTH SCAN ------------------ 
+\subsection{Stealth scans}
+\label{s:StealthScan}
+A stealth scan is what the name suggests it to be, to be a scan that should not be detected.
+Some of the evasion techniques used for a stealth scan is using various flag settings and fragmentation.
+Fragmentation means splitting up the scan requests over multiple packets by attempting to not getting detected while scanning. This applies to the TCP-based scanning requests \autocite{pinkard2008nmap}.
+
+Other evasion techniques such as slow and low scanning can be applied in order to not getting detected by an intrusion detection system (IDS). The technique limits the number of ports targeted for a larger timespan than a fast scan. By reducing the time of a scan reduces the risk of being detected. Some of the stealthy scanning techniques is NULL scan, XMAS scan, FIN scan, SYN/ACK scan and ACK scan \autocite{pinkard2008nmap}.
+
+
+%------------------ XMAS SCAN ------------------ 
+\subsubsection{XMAS Scan}
+\label{s:XMASScan}
+A Nmap XMAS scan sets the FIN (finish), PSH (push) and URG (urgent) flag during a scan. These flags should not occur in normal traffic and are therefore called invalid flags. The conventions for these types of packets are not established meaning various stacks in TCP would respond differently. Some TCP stacks would return a RST (reset) packet from both open and closed ports, while other systems can return no reply at all. The most typical is a reply with RST/ACK (reset/acknowledge) for closed ports, while open ports not replies at all and drops the received packet.
+The parameter for conducting a TCP XMAS Scan in nmap is $-sX$ \autocite{pinkard2008nmap, 10.5555/1538595}.
+The XMAS scan can based on this determine open and closed ports.
+%------------------ /XMAS SCAN ------------------ 
+
+
+
+%------------------ NULL SCAN ------------------ 
+\subsubsection{Null Scan}
+\label{s:NullScan}
+A nmap null scan does not set any flags, it sets the flag header to $0$. The name null scan abbreviates from this.
+Nmap null scan has the ability of being stealthy by avoiding intrusion detection systems, firewalls and system logging.
+A open port will, like the XMAS scan, drop the received packet and not reply to the scan request. Meanwhile, an closed port replies with RST/ACK (reset/acknowledge), where some systems replies with RST (reset) for all ports, and other systems might not reply at all to any received packets \autocite{pinkard2008nmap, 10.5555/1538595}. This is similar to the XMAS scan, elaborated in section \ref{s:XMASScan}. The parameter for conducting a null scan in nmap is $-sN$ \autocite{pinkard2008nmap}.
+
+
+%------------------ FIN SCAN ------------------ 
+\subsubsection{FIN Scan}
+\label{s:FINScan}
+The FIN scan are similar to the XMAS scan described in section \ref{s:XMASScan} and the Null scan described in section \ref{s:NullScan}. Though, it only sets the FIN (finish) flag during a scan compared to the two mentioned scanning methods. A port is considered closed if a RST (reset) is given in the reply. Considered as a open port is no reply \autocite{pinkard2008nmap, 10.5555/1538595}.
+The parameter for FIN scan in nmap is $-sF$.
+%------------------ /FIN SCAN ------------------ 

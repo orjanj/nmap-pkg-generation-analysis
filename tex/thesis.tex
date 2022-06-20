@@ -1,0 +1,76 @@
+\documentclass[10pt]{nucthesis}
+\newcommand{\myname}{\MYhref[black]{mailto:oaj@oaj.guru}{Ørjan Alexander Jacobsen}}
+\newcommand{\mytitle}{Synthetic Packet Generation and Characterization of Nmap Scans}
+\renewcommand{\mylocation}{Bodø, Norway}
+\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\usepackage{subfig}
+\usepackage{lipsum}
+\usepackage{quotchap}
+\usepackage{listings}
+\usepackage[final]{pdfpages}
+\usepackage[super]{nth}
+
+\renewcommand\listoflistingscaption{List of source codes and commands}
+
+%%------------------- DOC START + TITLE PAGE + PLAGIARY DECLARATION -------------------
+\begin{document}
+\input{Sections/Misc/00-Title-Plagitary}
+%%------------------- /DOC START + TITLE PAGE + PLAGIARY DECLARATION -------------------
+
+%% ---------------------------- ABSTRACT ----------------------------
+\input{Sections/Misc/01-Abstract}
+%% ---------------------------- /ABSTRACT ----------------------------
+
+%% ---------------------------- ACKNOWLEDGEMENTS ----------------------------
+\input{Sections/Misc/02-Acknowledgements}
+%% ---------------------------- /ACKNOWLEDGEMENTS ----------------------------
+
+%% ---------------------------- TABLE OF CONTENTS + LIST OF FIGURES / TABLES ----------------------------
+\input{Sections/Misc/03-ToC-Figures-Tables}
+%% ---------------------------- /TABLE OF CONTENTS + LIST OF FIGURES / TABLES ----------------------------
+
+
+%% ----------------------------  START Document Body ----------------------------
+\mainmatter
+
+%% ---------------------------- INTRODUCTION ----------------------------
+\input{Sections/1-Introduction/0-Index}
+%% ---------------------------- /INTRODUCTION ----------------------------
+
+%%  ---------------------------- LITERATURE REVIEW ----------------------------
+\input{Sections/2-Literature-Review/0-Index}
+%\input{Sections/Misc/Literature-Review}
+
+%% ---------------------------- /LITERATURE REVIEW  ----------------------------
+
+%% ---------------------------- DESIGN & IMPLEMENTATION ----------------------------
+\input{Sections/3-Design-Implementation/0-Index}
+%% ---------------------------- /DESIGN & IMPLEMENTATION ----------------------------
+
+
+%% ---------------------------- DATA GATHERING AND ANALYSIS ----------------------------
+\input{Sections/4-DataGathering-Analysis/0-Index}
+%% ---------------------------- /DATA GATHERING AND ANALYSIS ----------------------------
+
+
+
+%% ---------------------------- RESULTS ----------------------------
+\input{Sections/5-Results/0-Index}
+%% ---------------------------- /RESULTS ----------------------------
+
+%% ---------------------------- CONCLUSION ----------------------------
+\input{Sections/6-Conclusion/0-Index}
+%% ----------------------------/CONCLUSION ----------------------------
+
+%% ---------------------------- BIBLIOGRAPHY  ----------------------------
+\renewcommand{\bibname}{References}
+\printbibliography[heading=bibintoc]
+%% ---------------------------- /BIBLIOGRAPHY ----------------------------
+
+%% ---------------------------- APPENDICES ----------------------------
+\input{Sections/7-Appendicies/0-Index}
+%%- ---------------------------- /APPENDICES ----------------------------
+
+
+
+\end{document}

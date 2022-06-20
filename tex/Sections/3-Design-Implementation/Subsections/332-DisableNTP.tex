@@ -1,0 +1,18 @@
+%% ---------------- NTP ----------------
+\subsection{Disabling NTP}
+\label{ss:DisableNTP}
+Default in a Ubuntu distribution, like the 20.04 used in this research, a time and date service is active for the purpose of keeping the system updated with the correct date and time.
+The timedatectl would generate noise traffic such as NTP requests to ntp.ubuntu.com for synchronizing the time.
+During the initial setup, before noise reduction measurements were taken, a significant number of NTP requests were sent from the worker in order to reach ntp.ubuntu.com.
+The following command was executed to disable the network time
+synchronization\footnote{\OrjansHref{https://www.man7.org/linux/man-pages/man1/timedatectl.1.html}{https://www.man7.org/linux/man-pages/man1/timedatectl.1.html}}.
+
+\begin{listing}[!ht]
+\caption{Command for disabling NTP synchronisation}
+\label{lst:CommandDisableNTPSync}
+\begin{minted}{Bash}
+timedatectl set-ntp 0
+\end{minted}
+\end{listing}
+
+This command stops the synchronisation services which enables the virtual machine to use the host's clock.

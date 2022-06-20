@@ -1,0 +1,31 @@
+\section{Developed scripts}
+\label{s:Scripts}
+For the purpose of automating the issuing of tasks to each worker, automatic collection of packet captures, and retrieval of all packet captures from each worker, code had to be produced to achieve this goal. The scripts developed in this research are further described in each respective subsection in this section.
+
+
+
+\input{Sections/3-Design-Implementation/Subsections/341-Scanner}
+\input{Sections/3-Design-Implementation/Subsections/342-Cleanup}
+\input{Sections/3-Design-Implementation/Subsections/343-TaskPopulation}
+\input{Sections/3-Design-Implementation/Subsections/344-PcapRetrieval}
+
+\subsection{Task management scripts}
+
+% cleanup.sh
+A task processing script is running to maintain the task list with the correct given status of tasks.
+This meaning is only comparing running scan processes, identified by task name on the scanning host, against running tcpdump tasks on the given worker. When this differs, and only the tcpdump process together with the task name are found in the process list, it terminates the tcpdump on the worker and updates the task status in the task list.
+
+% monitor.sh
+A monitor script is also created to monitor the ongoing tasks. This monitor updates every 2 seconds, capturing scanning specific tasks and tcpdump tasks returning data for worker corresponding with task name, shown in figure \ref{fig:LabScanMonitor}.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[scale=0.7]{images/lab/workermonitor.png}}
+\caption{Capture of scan monitoring tool}
+\label{fig:LabScanMonitor}
+\end{figure}
+
+
+Other useful tools are developed, such as the \textsc{task populator}. The populator iterates through a given task file containing tasks that want to be run a number of times in order to generate a comparable synthetic data set in the end. An incrementing number is added to the task name (e.g., $nmap\_xmas\_scan\_1$) to uniquely identify a task when iterated through by the scan deployment stage.
+
+% retrieve.sh
+A simplistic collection of captured packet captures run through a retrieve script on the scanning host, which iterates through each worker host matching a specific filter (e.g., task name) and remotely synchronizes packet captures to the local output directory on the scanning host.

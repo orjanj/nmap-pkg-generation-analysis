@@ -1,0 +1,18 @@
+\section{Introduction}
+Within this chapter, the results conducted through the analysis earlier discussed in section \ref{s:DataGAAnalysis} be presented and discussed.
+By using the Jupyter notebook for conducting the analysis, visualizations are created in order to clearly see patterns that require further analysis.
+The most significant findings during the analysis are presented within this chapter.
+
+Chosen Nmap scanning types are \textit{xmas}, \textit{connect} (TCP full scan), \textit{null}, \textit{fin}, \textit{host discovery (ping)} and \textit{service scan}, further described in section \ref{s:HowToScanning}.
+All of Nmap's timing templates were used in the data generation, which is used for comparing the various scanning types in this chapter.
+To create a larger basis for comparison when visualizing diagrams in the results, one can type selected together mixed with one timing template.
+In this case, both the timing templates and the scan types can indicate what is normal for a scan by using visualizations.
+
+Packet count metrics are further elaborated based on the selection process mentioned above.
+The metrics extracted are the packets per second (PPS) indicating standard deviation, minimum and maximum packets per second.
+
+Port sequence analysis was applied in order to gain an understanding of the eventual existence of the same port sequence for each separate scan.
+This will be further described in the chapter, together with a number of unique source ports used for each scan.
+Each packet number is plotted in a diagram to visualize where the main emphasis of ports is targeted.
+Furthermore is the usage of both targeted (abbreviated as \textit{used ports}) and untargeted (abbreviated as \textit{unused ports}) ports presented.
+
