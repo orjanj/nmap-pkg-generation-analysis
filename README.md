@@ -10,3 +10,6 @@ This is developed as my bachelors degree in Cyber Security at [Noroff](https://w
 The Kanban board used for project management during development is located [here](https://github.com/users/orjanj/projects/3).
 
 The bachelor thesis is located [here](tex/thesis.pdf).
+
+## Info flow chart
+![Info flow chart](https://raw.githubusercontent.com/orjanj/nmap-pkg-generation-analysis/main/tex/images/lab/ScannerFlowChart.png "info flow chart")
